@@ -6,6 +6,11 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
     config.vm.box = "ubuntu/bionic64"
+    config.vm.provider "virtualbox" do |vbox|
+        vbox.memory = 512
+        vbox.cpus = 1
+    end
+      
 
     #config.vm.define "mysqldb" do |mysqldb|
         #mysqldb.vm.network "private_network", ip: "192.168.50.4"
@@ -62,6 +67,13 @@ Vagrant.configure("2") do |config|
 
     config.vm.define "phpweb" do |phpweb|
         phpweb.vm.network "forwarded_port", guest: 8888, host: 8082
+
+        phpweb.vm.provider "virtualbox" do |vbox|
+            vbox.memory = 1024
+            vbox.cpus = 1
+            vbox.name = "ubuntu_bionic_php7"
+        end
+
         phpweb.vm.network "public_network", ip: "192.168.3.251"
 
         phpweb.vm.provision "shell",
@@ -73,4 +85,12 @@ Vagrant.configure("2") do |config|
         end
     end
     
+    config.vm.define "memcached" do |memcached|
+        memcached.vm.box = "centos/7"
+        memcached.vm.provider "virtualbox" do |vbox|
+            vbox.memory = 1024
+            vbox.cpus = 1
+            vbox.name = "ubuntu_bionic_memcached"
+        end
+    end
 end
